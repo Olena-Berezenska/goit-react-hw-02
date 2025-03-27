@@ -2,14 +2,25 @@ import Description from './components/Description/Description';
 import Options from './components/Options/Options';
 import Feedback from './components/Feedback/Feedback';
 import Notification from './components/Notification/Notification';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const App = () => {
-  const [counts, setcounts] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  const [counts, setcounts] = useState(() => {
+    const SavedState = window.localStorage.getItem('CountState');
+    console.log(SavedState);
+    return SavedState !== null
+      ? JSON.parse(SavedState)
+      : {
+          good: 0,
+          neutral: 0,
+          bad: 0,
+        };
   });
+
+  useEffect(() => {
+    window.localStorage.setItem('CountState', JSON.stringify(counts));
+  }, [counts]);
+
   const handleClick = option => {
     setcounts({
       ...counts,
