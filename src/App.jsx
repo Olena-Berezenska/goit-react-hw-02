@@ -21,13 +21,14 @@ const App = () => {
     window.localStorage.setItem('CountState', JSON.stringify(counts));
   }, [counts]);
 
-  const handleClick = option => {
+  const updateFeedback = option => {
     setcounts({
       ...counts,
       [option]: counts[option] + 1,
     });
   };
   const totalFeedback = counts.good + counts.neutral + counts.bad;
+  const positiveFeedback = Math.round((counts.good / totalFeedback) * 100);
   const handleClickReset = () => {
     setcounts({
       good: 0,
@@ -40,14 +41,18 @@ const App = () => {
     <>
       <Description />
       <Options
-        handleClick={handleClick}
+        updateFeedback={updateFeedback}
         totalFeedback={totalFeedback}
         handleClickReset={handleClickReset}
       />
       {totalFeedback === 0 ? (
         <Notification />
       ) : (
-        <Feedback feedback={counts} totalFeedback={totalFeedback} />
+        <Feedback
+          feedback={counts}
+          totalFeedback={totalFeedback}
+          positiveFeedback={positiveFeedback}
+        />
       )}
     </>
   );
